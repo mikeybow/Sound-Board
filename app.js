@@ -1,39 +1,25 @@
-const soundsElement = document.querySelector('#sounds');
+const songList = ["applause", "boo", "gasp", "tada", "victory", "wrong"]
 
-(async () => {
-    const sounds = await getSounds();
-    addSoundsToPage(sounds);
-})();
-
-
-async function getSounds () {
-    const response = await fetch ('./sounds.json');
-    const json = await response.json();
-    return json;
-}
-
-function addSoundsToPage (sounds) {
-    sounds.forEach(sound => {
-        const soundDiv = document.createElement('div');
-        soundDiv.className = 'sound';
-        const soundTitle = document.createElement('h2');
-        soundTitle.textContent = sound.title;
-        soundDiv.appendChild(soundTitle);
-
-        const player = document.createElement('audio');
-        player.setAttribute('src', `sounds/${sound.src}`);
-        soundDiv.appendChild(player);
-
-        soundDiv.addEventListener('mousedown', () => {
-            soundDiv.style.background = 'blue';
-            player.currentTime = 0;
-            player.play();
-        });
-
-        soundDiv.addEventListener('mouseup', () => {
-            soundDiv.style.background = '';
-        });
-
-        soundsElement.appendChild(soundDiv);
+const stopSongs = () => {
+    songList.forEach((sound) => {
+        const song = document.querySelector(`#${sound}`);
+        
+        song.pause();
+        song.currentTime = 0;
     });
-}
+};
+
+
+songList.forEach((sound) => {
+    const btn = document.createElement("button");
+    btn.classList.add("btn");
+    btn.innerText = sound;
+
+    btn.addEventListener("click", () => {
+        stopSongs();
+
+        document.querySelector(`#${sound}`).play();
+    });
+
+    document.querySelector("#buttons").append(btn);
+});
